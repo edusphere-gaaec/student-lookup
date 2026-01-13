@@ -8,26 +8,27 @@
     body {
       font-family: Arial, sans-serif;
       background: #f0f6ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       margin: 0;
+      padding: 20px;
+    }
+
+    .wrapper {
+      max-width: 420px;
+      margin: 40px auto;
     }
 
     .container {
       background: white;
-      width: 100%;
-      max-width: 420px;
       padding: 25px;
       border-radius: 10px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: center;
     }
 
-    img {
+    .logo {
       width: 90px;
-      margin-bottom: 10px;
+      display: block;
+      margin: 0 auto 10px;
     }
 
     h1 {
@@ -40,6 +41,7 @@
       font-size: 14px;
       margin-bottom: 20px;
       color: #444;
+      font-weight: normal;
     }
 
     input {
@@ -49,6 +51,7 @@
       border-radius: 6px;
       border: 1px solid #ccc;
       margin-bottom: 10px;
+      box-sizing: border-box;
     }
 
     button {
@@ -83,24 +86,29 @@
 
 <body>
 
-  <div class="container">
-    <img src="AEC Logo T.png" alt="School Logo">
+  <div class="wrapper">
+    <div class="container">
 
-    <h1>Student Information Manager (S.I.M)</h1>
-    <h2>GA. Atoll Education Centre</h2>
+      <!-- CHANGE logo.png ONLY IF YOUR FILE NAME IS DIFFERENT -->
+      <img src="logo.png" alt="GA. Atoll Education Centre Logo" class="logo">
 
-    <input
-      type="text"
-      id="nidInput"
-      placeholder="Enter National ID Number"
-    >
+      <h1>Student Information Manager (S.I.M)</h1>
+      <h2>GA. Atoll Education Centre</h2>
 
-    <button onclick="checkStudent()">Check Student</button>
+      <input
+        type="text"
+        id="nidInput"
+        placeholder="Enter National ID Number"
+      >
 
-    <div class="result" id="result"></div>
+      <button onclick="checkStudent()">Check Student</button>
 
-    <div class="footer">
-      Developed by: Ahmed Naahil Naseer – 2026
+      <div class="result" id="result"></div>
+
+      <div class="footer">
+        Developed by: Ahmed Naahil Naseer – 2026
+      </div>
+
     </div>
   </div>
 
