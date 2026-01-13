@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Information Lookup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eaf1f8;
+      padding: 20px;
+    }
+    .card {
+      max-width: 420px;
+      background: #ffffff;
+      padding: 20px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 15px;
+    }
+    button {
+      background: #1f5fa6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 15px;
+      background: #f5f8fc;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Student Information</h2>
+  <input type="text" id="nid" placeholder="Enter National ID Number">
+  <button onclick="lookup()">Check</button>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  const sheetURL = "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1";
+
+  async function lookup() {
+    const nid = document.getElementById("nid").value.trim();
+    const result = document.getElementById("result");
+
+    if (!nid) {
+      result.innerText = "Please enter a National ID number.";
+      return;
+    }
+
+    result.innerText = "Checking...";
+
+    try {
+      const response = await fetch(sheetURL);
+      const data = await response.json();
+
+      const student = data.find(
+        row => row["National ID"].trim().toUpperCase() === nid.toUpperCase()
+      );
+
+      if (student) {
+        result.innerHTML = `
+          <div><span class="label">Student Name:</span> ${student["Student Name"]}</div>
+          <div><span class="label">National ID:</span> ${student["National ID"]}</div>
+          <div><span class="label">Index Number:</span> ${student["Index Number"]}</div>
+          <div><span class="label">Class:</span> ${student["Class"]}</div>
+        `;
+      } else {
+        result.innerText = "No record found for this National ID.";
+      }
+    } catch (error) {
+      result.innerText = "Error loading data. Please try again later.";
+    }
+  }
+</script>
+
+</body>
+</html>
