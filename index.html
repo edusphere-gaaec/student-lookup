@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Student Information Manager (S.I.M)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #e6f0ff, #f5f9ff);
+      background: #f0f6ff;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,172 +15,145 @@
       margin: 0;
     }
 
-    .card {
-      background: #ffffff;
-      padding: 28px;
-      border-radius: 14px;
+    .container {
+      background: white;
       width: 100%;
-      max-width: 450px;
-      box-shadow: 0 12px 30px rgba(0, 64, 128, 0.15);
+      max-width: 420px;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: center;
-      border-top: 6px solid #1f5fae;
     }
 
-    .logo {
-      width: 95px;
+    img {
+      width: 90px;
       margin-bottom: 10px;
     }
 
-    .school-name {
-      font-size: 22px;
-      font-weight: bold;
-      color: #1f5fae;
-      margin-bottom: 4px;
+    h1 {
+      font-size: 20px;
+      margin: 5px 0;
+      color: #0b4aa2;
     }
 
-    .system-name {
-      font-size: 16px;
-      color: #4a6fa5;
-      margin-bottom: 22px;
+    h2 {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #444;
     }
 
     input {
       width: 100%;
-      padding: 13px;
-      font-size: 16px;
-      margin-bottom: 15px;
-      box-sizing: border-box;
+      padding: 12px;
+      font-size: 15px;
       border-radius: 6px;
-      border: 1px solid #c6d9f1;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #1f5fae;
-      box-shadow: 0 0 0 2px rgba(31, 95, 174, 0.15);
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
     }
 
     button {
       width: 100%;
-      padding: 13px;
-      font-size: 16px;
-      background: linear-gradient(135deg, #1f5fae, #184b88);
+      padding: 12px;
+      background: #0b4aa2;
       color: white;
       border: none;
       border-radius: 6px;
+      font-size: 15px;
       cursor: pointer;
-      font-weight: bold;
     }
 
     button:hover {
-      opacity: 0.95;
+      background: #083b82;
     }
 
-    #result {
-      margin-top: 18px;
-      padding: 14px;
-      background: #f0f6ff;
-      border-left: 4px solid #1f5fae;
-      border-radius: 6px;
-      display: none;
+    .result {
+      margin-top: 15px;
       text-align: left;
-      font-size: 15px;
-    }
-
-    .error {
-      color: #c62828;
-      text-align: center;
-      font-weight: bold;
+      font-size: 14px;
     }
 
     .footer {
-      margin-top: 22px;
+      margin-top: 25px;
       font-size: 12px;
-      color: #6b7fa6;
+      color: #666;
       text-align: center;
     }
   </style>
 </head>
+
 <body>
 
-<div class="card">
+  <div class="container">
+    <img src="AEC Logo T.png" alt="School Logo">
 
-  <!-- LOGO -->
-  <img src="AEC_Logo_T.png" alt="GA. Atoll Education Centre Logo" class="logo">
+    <h1>Student Information Manager (S.I.M)</h1>
+    <h2>GA. Atoll Education Centre</h2>
 
-  <!-- SCHOOL & SYSTEM NAME -->
-  <div class="school-name">GA. Atoll Education Centre</div>
-  <div class="system-name">Student Information Manager (S.I.M)</div>
+    <input
+      type="text"
+      id="nidInput"
+      placeholder="Enter National ID Number"
+    >
 
-  <!-- INPUT -->
-  <input
-    type="text"
-    id="nid"
-    placeholder="Enter National ID Number"
-  >
+    <button onclick="checkStudent()">Check Student</button>
 
-  <button onclick="checkStudent()">Check Student</button>
+    <div class="result" id="result"></div>
 
-  <!-- RESULT -->
-  <div id="result"></div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    © GA. Atoll Education Centre<br>
-    Developed by: Ahmed Naahil Naseer – 2026
+    <div class="footer">
+      Developed by: Ahmed Naahil Naseer – 2026
+    </div>
   </div>
 
-</div>
+  <script>
+    async function checkStudent() {
+      const input = document.getElementById("nidInput");
+      const result = document.getElementById("result");
 
-<script>
-  const SHEET_URL =
-    "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1";
+      const nid = input.value.trim().toUpperCase();
 
-  async function checkStudent() {
-    const nidInput = document.getElementById("nid");
-    const resultDiv = document.getElementById("result");
-    const nid = nidInput.value.trim().toUpperCase();
-
-    resultDiv.style.display = "none";
-    resultDiv.innerHTML = "";
-
-    if (!nid) {
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML =
-        `<p class="error">Please enter a National ID.</p>`;
-      return;
-    }
-
-    try {
-      const response = await fetch(SHEET_URL);
-      const data = await response.json();
-
-      const student = data.find(
-        s => s["National ID"]?.toUpperCase() === nid
-      );
-
-      if (!student) {
-        resultDiv.style.display = "block";
-        resultDiv.innerHTML =
-          `<p class="error">Student not found.</p>`;
+      if (!nid) {
+        result.innerHTML = "Please enter a National ID number.";
         return;
       }
 
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `
-        <strong>Student Name:</strong> ${student["Student Name"]}<br>
-        <strong>National ID:</strong> ${student["National ID"]}<br>
-        <strong>Index Number:</strong> ${student["Index Number"]}<br>
-        <strong>Class:</strong> ${student["Class"]}
-      `;
-    } catch (error) {
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML =
-        `<p class="error">Error loading data. Please try again later.</p>`;
-      console.error(error);
+      result.innerHTML = "Checking...";
+
+      try {
+        const response = await fetch(
+          "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1"
+        );
+
+        const data = await response.json();
+
+        const student = data.find(s => {
+          const sheetNID =
+            s["National ID"] ||
+            s["NID"] ||
+            s["NationalID"];
+
+          return (
+            sheetNID &&
+            sheetNID.toString().trim().toUpperCase() === nid
+          );
+        });
+
+        if (student) {
+          result.innerHTML = `
+            <strong>Student Name:</strong> ${student["Student Name"]}<br>
+            <strong>National ID:</strong> ${student["National ID"]}<br>
+            <strong>Index Number:</strong> ${student["Index"]}<br>
+            <strong>Class:</strong> ${student["Class"]}
+          `;
+        } else {
+          result.innerHTML = "Student not found.";
+        }
+
+      } catch (error) {
+        result.innerHTML = "Error loading student data.";
+        console.error(error);
+      }
     }
-  }
-</script>
+  </script>
 
 </body>
 </html>
