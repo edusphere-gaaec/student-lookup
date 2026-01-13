@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #eef4fa;
+      background: linear-gradient(135deg, #e6f0ff, #f5f9ff);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,59 +18,70 @@
 
     .card {
       background: #ffffff;
-      padding: 25px;
-      border-radius: 12px;
+      padding: 28px;
+      border-radius: 14px;
       width: 100%;
-      max-width: 440px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      max-width: 450px;
+      box-shadow: 0 12px 30px rgba(0, 64, 128, 0.15);
       text-align: center;
+      border-top: 6px solid #1f5fae;
     }
 
     .logo {
-      width: 90px;
+      width: 95px;
       margin-bottom: 10px;
     }
 
     .school-name {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       color: #1f5fae;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .system-name {
       font-size: 16px;
-      margin-bottom: 20px;
-      color: #333;
+      color: #4a6fa5;
+      margin-bottom: 22px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       font-size: 16px;
       margin-bottom: 15px;
       box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #c6d9f1;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1f5fae;
+      box-shadow: 0 0 0 2px rgba(31, 95, 174, 0.15);
     }
 
     button {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       font-size: 16px;
-      background: #1f5fae;
+      background: linear-gradient(135deg, #1f5fae, #184b88);
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
-      background: #184b88;
+      opacity: 0.95;
     }
 
     #result {
-      margin-top: 15px;
-      padding: 12px;
-      background: #f6f8fa;
+      margin-top: 18px;
+      padding: 14px;
+      background: #f0f6ff;
+      border-left: 4px solid #1f5fae;
       border-radius: 6px;
       display: none;
       text-align: left;
@@ -78,14 +89,16 @@
     }
 
     .error {
-      color: red;
+      color: #c62828;
       text-align: center;
+      font-weight: bold;
     }
 
     .footer {
-      margin-top: 20px;
+      margin-top: 22px;
       font-size: 12px;
-      color: #666;
+      color: #6b7fa6;
+      text-align: center;
     }
   </style>
 </head>
@@ -107,7 +120,7 @@
     placeholder="Enter National ID Number"
   >
 
-  <button onclick="checkStudent()">Check</button>
+  <button onclick="checkStudent()">Check Student</button>
 
   <!-- RESULT -->
   <div id="result"></div>
