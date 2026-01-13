@@ -94,7 +94,7 @@
 <div class="card">
 
   <!-- LOGO -->
-  <img src="logo.png" alt="School Logo" class="logo">
+  <img src="AEC_Logo_T.png" alt="GA. Atoll Education Centre Logo" class="logo">
 
   <!-- SCHOOL & SYSTEM NAME -->
   <div class="school-name">GA. Atoll Education Centre</div>
@@ -122,4 +122,53 @@
 
 <script>
   const SHEET_URL =
-    "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYs_
+    "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1";
+
+  async function checkStudent() {
+    const nidInput = document.getElementById("nid");
+    const resultDiv = document.getElementById("result");
+    const nid = nidInput.value.trim().toUpperCase();
+
+    resultDiv.style.display = "none";
+    resultDiv.innerHTML = "";
+
+    if (!nid) {
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML =
+        `<p class="error">Please enter a National ID.</p>`;
+      return;
+    }
+
+    try {
+      const response = await fetch(SHEET_URL);
+      const data = await response.json();
+
+      const student = data.find(
+        s => s["National ID"]?.toUpperCase() === nid
+      );
+
+      if (!student) {
+        resultDiv.style.display = "block";
+        resultDiv.innerHTML =
+          `<p class="error">Student not found.</p>`;
+        return;
+      }
+
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `
+        <strong>Student Name:</strong> ${student["Student Name"]}<br>
+        <strong>National ID:</strong> ${student["National ID"]}<br>
+        <strong>Index Number:</strong> ${student["Index Number"]}<br>
+        <strong>Class:</strong> ${student["Class"]}
+      `;
+    } catch (error) {
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML =
+        `<p class="error">Error loading data. Please try again later.</p>`;
+      console.error(error);
+    }
+  }
+</script>
+
+</body>
+</html>
