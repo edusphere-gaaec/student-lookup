@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Student Information Lookup</title>
+  <title>Student Information Manager (S.I.M)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,17 +17,31 @@
     }
 
     .card {
-      background: #fff;
+      background: #ffffff;
       padding: 25px;
-      border-radius: 10px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 440px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      text-align: center;
     }
 
-    h2 {
-      margin-top: 0;
-      text-align: center;
+    .logo {
+      width: 90px;
+      margin-bottom: 10px;
+    }
+
+    .school-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1f5fae;
+      margin-bottom: 5px;
+    }
+
+    .system-name {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #333;
     }
 
     input {
@@ -42,7 +57,7 @@
       padding: 12px;
       font-size: 16px;
       background: #1f5fae;
-      color: #fff;
+      color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -58,19 +73,34 @@
       background: #f6f8fa;
       border-radius: 6px;
       display: none;
+      text-align: left;
+      font-size: 15px;
     }
 
     .error {
       color: red;
       text-align: center;
     }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <h2>Student Information</h2>
 
+  <!-- LOGO -->
+  <img src="logo.png" alt="School Logo" class="logo">
+
+  <!-- SCHOOL & SYSTEM NAME -->
+  <div class="school-name">GA. Atoll Education Centre</div>
+  <div class="system-name">Student Information Manager (S.I.M)</div>
+
+  <!-- INPUT -->
   <input
     type="text"
     id="nid"
@@ -79,56 +109,17 @@
 
   <button onclick="checkStudent()">Check</button>
 
+  <!-- RESULT -->
   <div id="result"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    © GA. Atoll Education Centre<br>
+    Developed by: Ahmed Naahil Naseer – 2026
+  </div>
+
 </div>
 
 <script>
   const SHEET_URL =
-    "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1";
-
-  async function checkStudent() {
-    const nidInput = document.getElementById("nid");
-    const resultDiv = document.getElementById("result");
-    const nid = nidInput.value.trim().toUpperCase();
-
-    resultDiv.style.display = "none";
-    resultDiv.innerHTML = "";
-
-    if (!nid) {
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `<p class="error">Please enter a National ID.</p>`;
-      return;
-    }
-
-    try {
-      const response = await fetch(SHEET_URL);
-      const data = await response.json();
-
-      const student = data.find(
-        s => s["National ID"]?.toUpperCase() === nid
-      );
-
-      if (!student) {
-        resultDiv.style.display = "block";
-        resultDiv.innerHTML = `<p class="error">Student not found.</p>`;
-        return;
-      }
-
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `
-        <strong>Student Name:</strong> ${student["Student Name"]}<br>
-        <strong>National ID:</strong> ${student["National ID"]}<br>
-        <strong>Index Number:</strong> ${student["Index Number"]}<br>
-        <strong>Class:</strong> ${student["Class"]}
-      `;
-    } catch (err) {
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML =
-        `<p class="error">Error loading data. Try again later.</p>`;
-      console.error(err);
-    }
-  }
-</script>
-
-</body>
-</html>
+    "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYs_
