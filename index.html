@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Information Manager (S.I.M)</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #0b4aa2, #1e90ff);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  text-align: center;
+}
+
+.logo {
+  width: 90px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 5px 0;
+  font-size: 20px;
+  color: #0b4aa2;
+}
+
+h2 {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #555;
+  font-weight: normal;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  background: #0b4aa2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #083b82;
+}
+
+.result {
+  margin-top: 15px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 15px;
+  display: none;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 4px solid #cfe0ff;
+  border-top: 4px solid #0b4aa2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.footer {
+  margin-top: 25px;
+  font-size: 12px;
+  color: #777;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <!-- LOGO -->
+  <img src="logo.png" alt="GA. Atoll Education Centre Logo" class="logo">
+
+  <h1>Student Information Manager (S.I.M)</h1>
+  <h2>GA. Atoll Education Centre</h2>
+
+  <input type="text" id="nidInput" placeholder="Enter National ID Number">
+
+  <button onclick="checkStudent()">Check Student</button>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div>Checking student information...</div>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <div class="footer">
+    Developed by: Ahmed Naahil Naseer – 2026
+  </div>
+
+</div>
+
+<script>
+async function checkStudent() {
+  const nidInput = document.getElementById("nidInput");
+  const result = document.getElementById("result");
+  const loading = document.getElementById("loading");
+
+  const nid = nidInput.value.trim().toUpperCase();
+
+  if (!nid) {
+    result.innerHTML = "Please enter a National ID number.";
+    return;
+  }
+
+  result.innerHTML = "";
+  loading.style.display = "block";
+
+  try {
+    const response = await fetch(
+      "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1"
+    );
+
+    const data = await response.json();
+
+    const student = data.find(s =>
+      s["National ID"] &&
+      s["National ID"].toString().trim().toUpperCase() === nid
+    );
+
+    loading.style.display = "none";
+
+    if (student) {
+      result.innerHTML = `
+        <strong>Student Name:</strong> ${student["Student Name"]}<br>
+        <strong>National ID:</strong> ${student["National ID"]}<br>
+        <strong>Index Number:</strong> ${student["Index Number"]}<br>
+        <strong>Class:</strong> ${student["Class"]}
+      `;
+    } else {
+      result.innerHTML = "Student not found.";
+    }
+
+  } catch (error) {
+    loading.style.display = "none";
+    result.innerHTML = "Error loading student data.";
+    console.error(error);
+  }
+}
+</script>
+
+</body>
+</html>
