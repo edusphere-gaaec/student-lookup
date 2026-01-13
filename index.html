@@ -1,91 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Student Information Lookup</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #eaf1f8;
-      padding: 20px;
-    }
-    .card {
-      max-width: 420px;
-      background: #ffffff;
-      padding: 20px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 12px;
-      font-size: 15px;
-    }
-    button {
-      background: #1f5fa6;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .result {
-      margin-top: 15px;
-      background: #f5f8fc;
-      padding: 12px;
-      border-radius: 6px;
-    }
-    .label {
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Student Information</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eef3f8;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 420px;
+    margin: 70px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background: #1e5fa8;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #174c87;
+}
+
+.result {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f5f8fc;
+    border-radius: 6px;
+    font-size: 15px;
+    display: none;
+    text-align: left;
+}
+
+.error {
+    color: red;
+    margin-top: 15px;
+}
+</style>
 </head>
+
 <body>
 
-<div class="card">
-  <h2>Student Information</h2>
-  <input type="text" id="nid" placeholder="Enter National ID Number">
-  <button onclick="lookup()">Check</button>
-  <div class="result" id="result"></div>
+<div class="container">
+    <h2>Student Information</h2>
+
+    <input type="text" id="nid" placeholder="Enter National ID Number">
+    <button onclick="checkStudent()">Check</button>
+
+    <div class="result" id="result"></div>
+    <div class="error" id="error"></div>
 </div>
 
 <script>
-  const sheetURL = "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1";
-
-  async function lookup() {
+async function checkStudent() {
     const nid = document.getElementById("nid").value.trim();
-    const result = document.getElementById("result");
+    const resultDiv = document.getElementById("result");
+    const errorDiv = document.getElementById("error");
+
+    resultDiv.style.display = "none";
+    errorDiv.innerHTML = "";
 
     if (!nid) {
-      result.innerText = "Please enter a National ID number.";
-      return;
+        errorDiv.innerHTML = "Please enter a National ID number.";
+        return;
     }
 
-    result.innerText = "Checking...";
+    resultDiv.innerHTML = "Checking...";
+    resultDiv.style.display = "block";
 
     try {
-      const response = await fetch(sheetURL);
-      const data = await response.json();
+        const response = await fetch(
+            "https://opensheet.elk.sh/1gu7StW61XlVAv_i9Vwg1PfoXpNajoJYsgdBsEawK1Is/Sheet1"
+        );
+        const data = await response.json();
 
-      const student = data.find(
-        row => row["National ID"].trim().toUpperCase() === nid.toUpperCase()
-      );
+        const student = data.find(row => row["National ID"] === nid);
 
-      if (student) {
-        result.innerHTML = `
-          <div><span class="label">Student Name:</span> ${student["Student Name"]}</div>
-          <div><span class="label">National ID:</span> ${student["National ID"]}</div>
-          <div><span class="label">Index Number:</span> ${student["Index Number"]}</div>
-          <div><span class="label">Class:</span> ${student["Class"]}</div>
-        `;
-      } else {
-        result.innerText = "No record found for this National ID.";
-      }
+        if (student) {
+            resultDiv.innerHTML = `
+                <strong>Student Name:</strong> ${student["Student Name"]}<br>
+                <strong>Index Number:</strong> ${student["Index"]}<br>
+                <strong>Class:</strong> ${student["Class"]}
+            `;
+        } else {
+            resultDiv.style.display = "none";
+            errorDiv.innerHTML = "No student found for this National ID.";
+        }
     } catch (error) {
-      result.innerText = "Error loading data. Please try again later.";
+        resultDiv.style.display = "none";
+        errorDiv.innerHTML = "Error loading data. Please try again later.";
     }
-  }
+}
 </script>
 
 </body>
